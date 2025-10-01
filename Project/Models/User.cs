@@ -4,6 +4,6 @@
     {
         public int UserId { get; init; }
         public decimal Finance { get; set; }
-        public List<Category> Transactions { get; set; } = new List<Category>();
+        public List<Category> Categories { get; set; } = new List<Category>();
     }
 }

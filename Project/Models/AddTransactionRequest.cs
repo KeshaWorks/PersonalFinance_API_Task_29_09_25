@@ -5,7 +5,7 @@
         public int UserId {  get; init; }
         public string Description { get; init; }
         public decimal Amount { get; set; }
-        public string Сategory {  get; init; }
+        public string СategoryName {  get; init; }
 
         public AddTransactionRequest(int userId, string description, decimal amount, string category)
         {
@@ -24,7 +24,7 @@
             {
                 throw new ArgumentNullException("category cannot be null");
             }
-            Сategory = category;
+            СategoryName = category;
         }
     }
 }

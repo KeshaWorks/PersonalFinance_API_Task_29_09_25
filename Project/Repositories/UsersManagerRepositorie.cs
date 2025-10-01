@@ -3,9 +3,13 @@ using Project.Models;
 
 namespace Project.Repositories
 {
-    public class UsersManagerRepositorie : IUsersManagerRepositorie
+    public class UsersManagerRepositorie : IUserManagerRepositorie
     {
-        private static int _id;
-        public List<User> Users { get; set; } = new List<User>();
+        public List<User> Users { get; set; } =
+        [
+            new User { UserId = 1, Finance = 1000, Categories = new List<Category>()},
+            new User { UserId = 2, Finance = 5000, Categories = new List<Category>()},
+            new User { UserId = 3, Finance = 250, Categories = new List<Category>()},
+        ]; 
     }
 }
