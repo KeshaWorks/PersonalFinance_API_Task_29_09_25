@@ -2,8 +2,8 @@
 {
     public record Category
     {
-        public string? CategoryName {  get; set; }
-        public decimal Limit { get; set; } = 0;
-        public List<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public string? CategoryName {  get; init; }
+        public decimal Limit { get; set; }
+        public List<Transaction> Transactions { get; init; } = new List<Transaction>();
     }
 }

@@ -1,3 +1,6 @@
+using Project.Interfaces;
+using Project.Services;
+
 namespace Project
 {
     public class Program
@@ -9,6 +12,12 @@ namespace Project
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            //Add DI
+
+            builder.Services.AddSingleton<IUserManagerService, UserManagerService>();
+            builder.Services.AddTransient<IRecommendationManagerService, RecommendationManagerService>();
+            builder.Services.AddTransient<ILimitManagerService, LimitManagerService>();
 
             var app = builder.Build();
 

@@ -1,9 +1,8 @@
 ﻿namespace Project.Models
 {
-    public class User
+    public record User
     {
-        public int UserId { get; init; }
-        public decimal Finance { get; set; }
+        public int UserId { get; init; } 
         public List<Category> Categories { get; set; } = new List<Category>();
     }
 }

@@ -4,6 +4,6 @@ namespace Project.Interfaces
 {
     public interface ILimitManagerService
     {
-        public void AddLimit(AddLimitRequest addLimitRequest);
+        public void AddLimit(AddLimitRequest addLimitRequest, List<User> users);
     }
 }

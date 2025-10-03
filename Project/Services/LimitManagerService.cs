@@ -3,22 +3,21 @@ using Project.Models;
 
 namespace Project.Services
 {
+    /// <summary>
+    /// Service that manages limit
+    /// </summary>
     public class LimitManagerService : ILimitManagerService
     {
-        private IUserManagerRepositorie _userManagerRepositorie;
-
-        public LimitManagerService(IUserManagerRepositorie userManagerRepositorie)
+        /// <summary>
+        /// Set limit 
+        /// </summary>
+        /// <param name="addLimitRequest"></param>
+        /// <param name="users"></param>
+        public void AddLimit(AddLimitRequest addLimitRequest, List<User> users)
         {
-            _userManagerRepositorie = userManagerRepositorie;
-        }
+            User user = users.Find(x => x.UserId == addLimitRequest.UserId);
 
-        public void AddLimit(AddLimitRequest addLimitRequest)
-        {
-            if (CheckUserIdValidation(addLimitRequest.UserId))
-            {
-                throw new Exception("Такого пользователя не существует");
-            }
-            User user = _userManagerRepositorie.Users.Find(x => x.UserId == addLimitRequest.UserId);
+            //Check Id this category exist otherwise set new limit
             if (!user.Categories.Any(x => x.CategoryName == addLimitRequest.СategoryName))
             {
                 user.Categories.Add(new Category
@@ -27,10 +26,11 @@ namespace Project.Services
                     Limit = addLimitRequest.Limit
                 });
             }
-            Category category = user.Categories.Find(x => x.CategoryName == addLimitRequest.СategoryName);
-            category.Limit += addLimitRequest.Limit;
+            else
+            {
+                Category category = user.Categories.Find(x => x.CategoryName == addLimitRequest.СategoryName);
+                category.Limit = addLimitRequest.Limit;
+            }
         }
-
-        private bool CheckUserIdValidation(int userId) => !_userManagerRepositorie.Users.Any(x => x.UserId == userId);
     }
 }

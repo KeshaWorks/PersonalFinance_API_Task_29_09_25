@@ -8,5 +8,6 @@ namespace Project.Interfaces
         public List<Transaction> GetUserTransactions(int userId);
         public void AddLimit(AddLimitRequest addLimitRequest);
         public List<Analysis> GetAnalyzes(int userId);
+        public InsightSaving[] GetInsightsSavings(int userId);
     }
 }
