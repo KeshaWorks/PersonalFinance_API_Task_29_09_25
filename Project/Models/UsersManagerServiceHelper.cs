@@ -7,7 +7,7 @@
     {
         public decimal Limit { get; init; }
         public decimal TotalSum {  get; init; }
-        public string? Categorie { get; init; }
+        public string Categorie { get; init; }
 
         public UsersManagerServiceHelper(decimal limit, decimal totalSym, string? categorie)
         {

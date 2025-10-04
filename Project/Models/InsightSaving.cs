@@ -2,7 +2,7 @@
 {
     public record InsightSaving
     {
-        public string? Message { get; init; }
+        public string Message { get; init; }
         public decimal PotentialSavings {  get; init; }
         public string? Category { get; init; }
 

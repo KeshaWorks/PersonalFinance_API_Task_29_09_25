@@ -8,6 +8,13 @@ namespace Project.Services
     /// </summary>
     public class LimitManagerService : ILimitManagerService
     {
+        private readonly ILogger<LimitManagerService> _logger;
+
+        public LimitManagerService(ILogger<LimitManagerService> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// Set limit 
         /// </summary>
@@ -15,9 +22,15 @@ namespace Project.Services
         /// <param name="users"></param>
         public void AddLimit(AddLimitRequest addLimitRequest, List<User> users)
         {
+            if (!users.Any(x => x.UserId == addLimitRequest.UserId))
+            {
+                _logger.LogError("Пользователь не найден");
+                throw new Exception("Такого пользователя не существует");
+            }
+
             User user = users.Find(x => x.UserId == addLimitRequest.UserId);
 
-            //Check Id this category exist otherwise set new limit
+            // Check Id this category exist otherwise set new limit
             if (!user.Categories.Any(x => x.CategoryName == addLimitRequest.СategoryName))
             {
                 user.Categories.Add(new Category

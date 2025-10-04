@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project.Interfaces;
 using Project.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project.Controllers
 {
-    //Сделать общий анализ
-    //Добавить тесты
-    //Добавить валидация атрибутам или fluent
-    //Добавить логирование(для каждого сервиса), для контроллер вслучае если будут ошибки
+    //1 Добавить тесты
 
     /// <summary>
     /// Controller for managment person's finance
@@ -18,9 +16,12 @@ namespace Project.Controllers
     {
         private IUserManagerService _userManagerService;
 
-        public PersonalFinanceController(IUserManagerService userManagerService)
+        private readonly ILogger<PersonalFinanceController> _logger;
+
+        public PersonalFinanceController(IUserManagerService userManagerService, ILogger<PersonalFinanceController> logger)
         {
             _userManagerService = userManagerService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -31,6 +32,7 @@ namespace Project.Controllers
         [HttpPost("transactions")]
         public async Task<IActionResult> AddTransaction(AddTransactionRequest addTransactionRequest)
         {
+            _logger.LogInformation("Записывание транзакции");
             _userManagerService.AddTransaction(addTransactionRequest);
             return Ok("Транзакция успешно записана!");
         }
@@ -41,8 +43,9 @@ namespace Project.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("transactions")]
-        public async Task<IActionResult> GetUserTransactions([FromQuery] int userId)
+        public async Task<IActionResult> GetUserTransactions([FromQuery][Range(1, int.MaxValue)] int userId)
         {
+            _logger.LogInformation("Получение Транзакций пользователя");
             return Ok(_userManagerService.GetUserTransactions(userId));
         }
 
@@ -54,6 +57,7 @@ namespace Project.Controllers
         [HttpPut("budgets")]
         public async Task<IActionResult> AddLimit(AddLimitRequest addLimitRequest) 
         {
+            _logger.LogInformation("Установка лимита");
             _userManagerService.AddLimit(addLimitRequest);
             return Ok("Лимит успешно установлен!");
         }
@@ -64,8 +68,9 @@ namespace Project.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("budgets/analysis")]
-        public async Task<IActionResult> GetAnalyzes([FromQuery] int userId)
+        public async Task<IActionResult> GetAnalyzes([FromQuery][Range(1, int.MaxValue)] int userId)
         {
+            _logger.LogInformation("Получения анализа о категории");
             return Ok(_userManagerService.GetAnalyzes(userId));
         }
 
@@ -75,8 +80,9 @@ namespace Project.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("insights/savings")]
-        public async Task<IActionResult> GetInsightsSavings([FromQuery] int userId)
+        public async Task<IActionResult> GetInsightsSavings([FromQuery][Range(1, int.MaxValue)] int userId)
         {
+            _logger.LogInformation("Получение советов о финансов");
             return Ok(_userManagerService.GetInsightsSavings(userId));
         }
     }

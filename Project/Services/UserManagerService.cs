@@ -19,14 +19,18 @@ namespace Project.Services
         private ILimitManagerService _limitManagerService;
         private IRecommendationManagerService _recommendManagerService;
 
+        private readonly ILogger<UserManagerService> _logger;
+
         public UserManagerService
             (
             ILimitManagerService limitManagerService, 
-            IRecommendationManagerService recommendManagerService
+            IRecommendationManagerService recommendManagerService,
+            ILogger<UserManagerService> logger
             )
         {
             _limitManagerService = limitManagerService;
             _recommendManagerService = recommendManagerService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -36,10 +40,17 @@ namespace Project.Services
         /// <exception cref="Exception">Limit validation</exception>
         public void AddTransaction(AddTransactionRequest addTransactionRequest)
         {
+            if (!Users.Any(x => x.UserId == addTransactionRequest.UserId))
+            {
+                _logger.LogError("Пользователь не найден");
+                throw new Exception("Такого пользователя не существует");
+            }
+
             User user = Users.Find(x => x.UserId == addTransactionRequest.UserId);
 
             if (!user.Categories.Any(x => x.CategoryName == addTransactionRequest.СategoryName))
             {
+                _logger.LogError("Лимит не обнаружен");
                 throw new Exception("Сначала установаите лимит для этой категории!");
             }
 
@@ -53,6 +64,7 @@ namespace Project.Services
 
             if (categorySum + addTransactionRequest.Amount > category.Limit)
             {
+                _logger.LogError("Попытка превышения лимита");
                 throw new Exception("Вы не можете превысить лимит по этой категории!");
             }
 
@@ -66,6 +78,12 @@ namespace Project.Services
         /// <returns></returns>
         public List<Transaction> GetUserTransactions(int userId)
         {
+            if (!Users.Any(x => x.UserId == userId))
+            {
+                _logger.LogError("Пользователь не найден");
+                throw new Exception("Такого пользователя не существует");
+            }
+
             User user = Users.Find(x => x.UserId == userId);
             List<Transaction> transactions = new List<Transaction>();
 
@@ -90,6 +108,12 @@ namespace Project.Services
         /// <returns></returns>
         public List<Analysis> GetAnalyzes(int userId)
         {
+            if (!Users.Any(x => x.UserId == userId))
+            {
+                _logger.LogError("Пользователь не найден");
+                throw new Exception("Такого пользователя не существует");
+            }
+
             User user = Users.Find(x => x.UserId == userId);
             List<Analysis> analysis = new List<Analysis>();
             int userCatigoriesCount = user.Categories.Count;
