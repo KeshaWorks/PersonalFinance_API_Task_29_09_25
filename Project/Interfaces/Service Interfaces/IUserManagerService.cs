@@ -1,4 +1,5 @@
 ﻿using Project.Models;
+using Project.Models.TakedFromBody;
 
 namespace Project.Interfaces
 {
@@ -6,8 +7,6 @@ namespace Project.Interfaces
     {
         public void AddTransaction(AddTransactionRequest addTransactionRequest);
         public List<Transaction> GetUserTransactions(int userId);
-        public void AddLimit(AddLimitRequest addLimitRequest);
         public List<Analysis> GetAnalyzes(int userId);
-        public InsightSaving[] GetInsightsSavings(int userId);
     }
 }

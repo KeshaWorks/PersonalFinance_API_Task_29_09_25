@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Project.Models;
+using Project.Models.TakedFromBody;
 
 namespace Project.Validators
 {
@@ -14,7 +14,7 @@ namespace Project.Validators
                 .NotNull();
 
             RuleFor(x => x.Limit)
-                .GreaterThan(0);
+                .GreaterThan(0).WithMessage("Limit должен быть больше 0");
         }
     }
 }

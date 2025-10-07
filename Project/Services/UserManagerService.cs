@@ -1,5 +1,6 @@
 ﻿using Project.Interfaces;
 using Project.Models;
+using Project.Models.TakedFromBody;
 using Transaction = Project.Models.Transaction;
 
 namespace Project.Services
@@ -9,27 +10,17 @@ namespace Project.Services
     /// </summary>
     public class UserManagerService : IUserManagerService
     {
-        public List<User> Users { get; set; } =
-        [
-            new User { UserId = 1, Categories = new List<Category>()},
-            new User { UserId = 2, Categories = new List<Category>()},
-            new User { UserId = 3, Categories = new List<Category>()},
-        ];
-
-        private ILimitManagerService _limitManagerService;
-        private IRecommendationManagerService _recommendManagerService;
+        private IUserManagerRepositorie _userManagerRepositorie;
 
         private readonly ILogger<UserManagerService> _logger;
 
         public UserManagerService
             (
-            ILimitManagerService limitManagerService, 
-            IRecommendationManagerService recommendManagerService,
+            IUserManagerRepositorie userManagerRepositorie,
             ILogger<UserManagerService> logger
             )
         {
-            _limitManagerService = limitManagerService;
-            _recommendManagerService = recommendManagerService;
+            _userManagerRepositorie = userManagerRepositorie;
             _logger = logger;
         }
 
@@ -40,13 +31,7 @@ namespace Project.Services
         /// <exception cref="Exception">Limit validation</exception>
         public void AddTransaction(AddTransactionRequest addTransactionRequest)
         {
-            if (!Users.Any(x => x.UserId == addTransactionRequest.UserId))
-            {
-                _logger.LogError("Пользователь не найден");
-                throw new Exception("Такого пользователя не существует");
-            }
-
-            User user = Users.Find(x => x.UserId == addTransactionRequest.UserId);
+            var user = _userManagerRepositorie.GetUserById(addTransactionRequest.UserId);
 
             if (!user.Categories.Any(x => x.CategoryName == addTransactionRequest.СategoryName))
             {
@@ -69,6 +54,8 @@ namespace Project.Services
             }
 
             category.Transactions.Add(new Transaction(addTransactionRequest.Description, addTransactionRequest.Amount));
+
+            _logger.LogInformation("Записи успещно записаны");
         }
 
         /// <summary>
@@ -78,13 +65,8 @@ namespace Project.Services
         /// <returns></returns>
         public List<Transaction> GetUserTransactions(int userId)
         {
-            if (!Users.Any(x => x.UserId == userId))
-            {
-                _logger.LogError("Пользователь не найден");
-                throw new Exception("Такого пользователя не существует");
-            }
+            var user = _userManagerRepositorie.GetUserById(userId);
 
-            User user = Users.Find(x => x.UserId == userId);
             List<Transaction> transactions = new List<Transaction>();
 
             foreach (var transactionList in user.Categories)
@@ -92,14 +74,10 @@ namespace Project.Services
                 transactions.AddRange(transactionList.Transactions);
             }
 
+            _logger.LogInformation("Записи отправляются");
+
             return transactions;
         }
-
-        /// <summary>
-        /// Add limit for specified categorie
-        /// </summary>
-        /// <param name="addLimitRequest"></param>
-        public void AddLimit(AddLimitRequest addLimitRequest) => _limitManagerService.AddLimit(addLimitRequest, Users);
 
         /// <summary>
         /// Get information about every categorie
@@ -108,13 +86,7 @@ namespace Project.Services
         /// <returns></returns>
         public List<Analysis> GetAnalyzes(int userId)
         {
-            if (!Users.Any(x => x.UserId == userId))
-            {
-                _logger.LogError("Пользователь не найден");
-                throw new Exception("Такого пользователя не существует");
-            }
-
-            User user = Users.Find(x => x.UserId == userId);
+            var user = _userManagerRepositorie.GetUserById(userId);
             List<Analysis> analysis = new List<Analysis>();
             int userCatigoriesCount = user.Categories.Count;
 
@@ -133,14 +105,9 @@ namespace Project.Services
                 analysis.Add(new Analysis(categoryName, limit, actualSpent));
             }
 
+            _logger.LogInformation("Записи отправляются");
+
             return analysis;
         }
-
-        /// <summary>
-        /// Get 3 recommendation about expenses
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public InsightSaving[] GetInsightsSavings(int userId) => _recommendManagerService.GetInsightsSavings(userId, Users);
     }
 }

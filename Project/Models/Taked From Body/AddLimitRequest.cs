@@ -1,4 +1,4 @@
-﻿namespace Project.Models
+﻿namespace Project.Models.TakedFromBody
 {
     /// <summary>
     /// Record that gets information about limit

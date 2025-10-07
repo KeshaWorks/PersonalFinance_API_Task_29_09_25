@@ -4,6 +4,6 @@ namespace Project.Interfaces
 {
     public interface IRecommendationManagerService
     {
-        public InsightSaving[] GetInsightsSavings(int userId, List<User> users);
+        public InsightSaving[] GetInsightsSavings(int userId);
     }
 }

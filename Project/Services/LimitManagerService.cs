@@ -1,5 +1,6 @@
 ﻿using Project.Interfaces;
 using Project.Models;
+using Project.Models.TakedFromBody;
 
 namespace Project.Services
 {
@@ -8,10 +9,13 @@ namespace Project.Services
     /// </summary>
     public class LimitManagerService : ILimitManagerService
     {
+        private IUserManagerRepositorie _userManagerRepositorie;
+
         private readonly ILogger<LimitManagerService> _logger;
 
-        public LimitManagerService(ILogger<LimitManagerService> logger)
+        public LimitManagerService(IUserManagerRepositorie userManagerRepositorie, ILogger<LimitManagerService> logger)
         {
+            _userManagerRepositorie = userManagerRepositorie;
             _logger = logger;
         }
 
@@ -20,15 +24,9 @@ namespace Project.Services
         /// </summary>
         /// <param name="addLimitRequest"></param>
         /// <param name="users"></param>
-        public void AddLimit(AddLimitRequest addLimitRequest, List<User> users)
+        public void AddLimit(AddLimitRequest addLimitRequest)
         {
-            if (!users.Any(x => x.UserId == addLimitRequest.UserId))
-            {
-                _logger.LogError("Пользователь не найден");
-                throw new Exception("Такого пользователя не существует");
-            }
-
-            User user = users.Find(x => x.UserId == addLimitRequest.UserId);
+            var user = _userManagerRepositorie.GetUserById(addLimitRequest.UserId);
 
             // Check Id this category exist otherwise set new limit
             if (!user.Categories.Any(x => x.CategoryName == addLimitRequest.СategoryName))
@@ -44,6 +42,8 @@ namespace Project.Services
                 Category category = user.Categories.Find(x => x.CategoryName == addLimitRequest.СategoryName);
                 category.Limit = addLimitRequest.Limit;
             }
+
+            _logger.LogInformation("Лимит добавлен");
         }
     }
 }

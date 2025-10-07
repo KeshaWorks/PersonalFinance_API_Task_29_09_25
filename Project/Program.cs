@@ -1,5 +1,6 @@
 using FluentValidation;
 using Project.Interfaces;
+using Project.Repositories;
 using Project.Services;
 
 namespace Project
@@ -14,11 +15,17 @@ namespace Project
 
             builder.Services.AddControllers();
 
-            // Add DI
+            // Add DI for services
 
-            builder.Services.AddSingleton<IUserManagerService, UserManagerService>();
-            builder.Services.AddTransient<IRecommendationManagerService, RecommendationManagerService>();
-            builder.Services.AddTransient<ILimitManagerService, LimitManagerService>();
+            builder.Services.AddScoped<IUserManagerService, UserManagerService>();
+            builder.Services.AddScoped<ILimitManagerService, LimitManagerService>();
+            builder.Services.AddScoped<IRecommendationManagerService, RecommendationManagerService>();
+
+            // Add DI for repositories
+
+            builder.Services.AddSingleton<IUserManagerRepositorie, UserManagerRepositorie>();
+
+            // Add DI for validators
 
             builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 

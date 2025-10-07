@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project.Interfaces;
-using Project.Models;
+using Project.Models.TakedFromBody;
 using System.ComponentModel.DataAnnotations;
 
 namespace Project.Controllers
 {
-    //1 Добавить тесты
-
     /// <summary>
     /// Controller for managment person's finance
     /// </summary>
-    [Route("api")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PersonalFinanceController : ControllerBase
     {
@@ -50,19 +48,6 @@ namespace Project.Controllers
         }
 
         /// <summary>
-        /// Add limit for specified categorie
-        /// </summary>
-        /// <param name="addLimitRequest"></param>
-        /// <returns></returns>
-        [HttpPut("budgets")]
-        public async Task<IActionResult> AddLimit(AddLimitRequest addLimitRequest) 
-        {
-            _logger.LogInformation("Установка лимита");
-            _userManagerService.AddLimit(addLimitRequest);
-            return Ok("Лимит успешно установлен!");
-        }
-
-        /// <summary>
         /// Get information about every categorie
         /// </summary>
         /// <param name="userId"></param>
@@ -72,18 +57,6 @@ namespace Project.Controllers
         {
             _logger.LogInformation("Получения анализа о категории");
             return Ok(_userManagerService.GetAnalyzes(userId));
-        }
-
-        /// <summary>
-        /// Get 3 recommendation about expenses
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        [HttpGet("insights/savings")]
-        public async Task<IActionResult> GetInsightsSavings([FromQuery][Range(1, int.MaxValue)] int userId)
-        {
-            _logger.LogInformation("Получение советов о финансов");
-            return Ok(_userManagerService.GetInsightsSavings(userId));
         }
     }
 }

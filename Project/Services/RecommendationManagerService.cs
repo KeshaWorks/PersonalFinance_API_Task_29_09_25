@@ -8,10 +8,17 @@ namespace Project.Services
     /// </summary>
     public class RecommendationManagerService : IRecommendationManagerService
     {
+        private IUserManagerRepositorie _userManagerRepositorie;
+
         private readonly ILogger<RecommendationManagerService> _logger;
 
-        public RecommendationManagerService(ILogger<RecommendationManagerService> logger)
+        public RecommendationManagerService
+            (
+            IUserManagerRepositorie userManagerRepositorie, 
+            ILogger<RecommendationManagerService> logger
+            )
         {
+            _userManagerRepositorie = userManagerRepositorie;
             _logger = logger;
         }
 
@@ -21,15 +28,9 @@ namespace Project.Services
         /// <param name="userId"></param>
         /// <param name="users"></param>
         /// <returns>Recomendation list</returns>
-        public InsightSaving[] GetInsightsSavings(int userId, List<User> users)
+        public InsightSaving[] GetInsightsSavings(int userId)
         {
-            if (!users.Any(x => x.UserId == userId))
-            {
-                _logger.LogError("Пользователь не найден");
-                throw new Exception("Такого пользователя не существует");
-            }
-
-            User user = users.Find(x => x.UserId == userId);
+            var user = _userManagerRepositorie.GetUserById(userId);
             int userCatigoriesCount = user.Categories.Count;
             List<UsersManagerServiceHelper> usersManagerRepositorieHelpers = new List<UsersManagerServiceHelper>();
 
@@ -63,6 +64,8 @@ namespace Project.Services
                 insightSavings[i] = new InsightSaving($"«Вы использовали {Math.Round((totalSum / limit) * 100)}% бюджета в категории \"{{{usersManagerRepositorieHelpers[i].Categorie}}}\". " +
                     $"Рассмотрите возможность сократить расходы.»", totalSum / 2, usersManagerRepositorieHelpers[i].Categorie);
             }
+
+            _logger.LogInformation("Записи успещно сохранены");
 
             return insightSavings;
         }
