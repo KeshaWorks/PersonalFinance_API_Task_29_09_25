@@ -87,5 +87,51 @@ namespace PersonalFinanceTest.ServicesTests
 
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void Add_transaction_when_categorie_dont_exist_test()
+        {
+            var repositorieMock = new Mock<IUserManagerRepositorie>();
+            var loggerMock = new Mock<ILogger<UserManagerService>>();
+
+            List<Category> categories =
+            [
+                new Category{ CategoryName = "Test1", Limit = 1000, Transactions = new List<Transaction>()}
+            ];
+
+            User user = new User { UserId = 1, Categories = categories };
+
+            repositorieMock.Setup(x => x.GetUserById(1))
+                    .Returns(user);
+
+            UserManagerService userManagerService = new UserManagerService(repositorieMock.Object, loggerMock.Object);
+
+            var result = Record.Exception(() => userManagerService.AddTransaction(new AddTransactionRequest { Amount = 500, Description = "Test2", UserId = 1, СategoryName = "Test" }));
+
+            Assert.Equal("Сначала установаите лимит для этой категории!", result.Message);
+        }
+
+        [Fact]
+        public void Add_transaction_when_amount_more_limit()
+        {
+            var repositorieMock = new Mock<IUserManagerRepositorie>();
+            var loggerMock = new Mock<ILogger<UserManagerService>>();
+
+            List<Category> categories =
+            [
+                new Category{ CategoryName = "Test", Limit = 1000, Transactions = new List<Transaction>()}
+            ];
+
+            User user = new User { UserId = 1, Categories = categories };
+
+            repositorieMock.Setup(x => x.GetUserById(1))
+                    .Returns(user);
+
+            UserManagerService userManagerService = new UserManagerService(repositorieMock.Object, loggerMock.Object);
+
+            var result = Record.Exception(() => userManagerService.AddTransaction(new AddTransactionRequest { Amount = 1100, Description = "Test2", UserId = 1, СategoryName = "Test" }));
+
+            Assert.Equal("Вы не можете превысить лимит по этой категории!", result.Message);
+        }
     }
 }
