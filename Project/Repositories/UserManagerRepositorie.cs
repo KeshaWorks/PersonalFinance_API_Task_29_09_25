@@ -22,11 +22,6 @@ namespace Project.Repositories
             new User { UserId = 3, Categories = new List<Category>()},
         ];
 
-        public List<User> GetUsers()
-        {
-            return Users;
-        }
-
         public User GetUserById(int userId)
         {
             if (!Users.Any(x => x.UserId == userId))

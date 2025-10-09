@@ -33,7 +33,7 @@ namespace Project.Controllers
         [HttpPut("budgets")]
         public async Task<IActionResult> AddLimit(AddLimitRequest addLimitRequest)
         {
-            _logger.LogInformation("Установка лимита");
+            _logger.LogInformation($"Установка лимита для {addLimitRequest.UserId}");
             _limitManagerService.AddLimit(addLimitRequest);
             return Ok("Лимит успешно установлен!");
         }

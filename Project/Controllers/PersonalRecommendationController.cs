@@ -33,7 +33,7 @@ namespace Project.Controllers
         [HttpGet("insights/savings")]
         public async Task<IActionResult> GetInsightsSavings([FromQuery][Range(1, int.MaxValue)] int userId)
         {
-            _logger.LogInformation("Получение советов о финансов");
+            _logger.LogInformation($"Получение советов о финансов для {userId}");
             return Ok(_recommendManagerService.GetInsightsSavings(userId));
         }
     }

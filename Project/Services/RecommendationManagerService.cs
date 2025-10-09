@@ -65,7 +65,7 @@ namespace Project.Services
                     $"Рассмотрите возможность сократить расходы.»", totalSum / 2, usersManagerRepositorieHelpers[i].Categorie);
             }
 
-            _logger.LogInformation("Записи успещно сохранены");
+            _logger.LogInformation($"Записи успещно сохранены для {userId}");
 
             return insightSavings;
         }

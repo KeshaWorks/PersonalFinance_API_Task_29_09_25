@@ -11,10 +11,12 @@ namespace Project.Validators
         public AddLimitRequestValidator() 
         {
             RuleFor(x => x.СategoryName)
-                .NotNull();
+                .NotNull()
+                .WithMessage("CategoryName не может быть пустым");
 
             RuleFor(x => x.Limit)
-                .GreaterThan(0).WithMessage("Limit должен быть больше 0");
+                .GreaterThan(0)
+                .WithMessage("Limit должен быть больше 0");
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Project.Services
                 category.Limit = addLimitRequest.Limit;
             }
 
-            _logger.LogInformation("Лимит добавлен");
+            _logger.LogInformation($"Лимит добавлен для {addLimitRequest.СategoryName}");
         }
     }
 }

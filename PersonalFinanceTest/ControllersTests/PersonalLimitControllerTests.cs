@@ -5,7 +5,7 @@ using Project.Controllers;
 using Project.Interfaces;
 using Project.Models.TakedFromBody;
 
-namespace PersonalFinanceTest
+namespace PersonalFinanceTest.ControllersTests
 {
     public class PersonalLimitControllerTests
     {

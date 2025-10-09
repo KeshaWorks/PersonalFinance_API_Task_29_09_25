@@ -30,7 +30,7 @@ namespace Project.Controllers
         [HttpPost("transactions")]
         public async Task<IActionResult> AddTransaction(AddTransactionRequest addTransactionRequest)
         {
-            _logger.LogInformation("Записывание транзакции");
+            _logger.LogInformation($"Записывание транзакции  для {addTransactionRequest.UserId}");
             _userManagerService.AddTransaction(addTransactionRequest);
             return Ok("Транзакция успешно записана!");
         }
@@ -43,7 +43,7 @@ namespace Project.Controllers
         [HttpGet("transactions")]
         public async Task<IActionResult> GetUserTransactions([FromQuery][Range(1, int.MaxValue)] int userId)
         {
-            _logger.LogInformation("Получение Транзакций пользователя");
+            _logger.LogInformation($"Получение Транзакций пользователя {userId}");
             return Ok(_userManagerService.GetUserTransactions(userId));
         }
 
@@ -55,7 +55,7 @@ namespace Project.Controllers
         [HttpGet("budgets/analysis")]
         public async Task<IActionResult> GetAnalyzes([FromQuery][Range(1, int.MaxValue)] int userId)
         {
-            _logger.LogInformation("Получения анализа о категории");
+            _logger.LogInformation($"Получения анализа о категории для {userId}");
             return Ok(_userManagerService.GetAnalyzes(userId));
         }
     }

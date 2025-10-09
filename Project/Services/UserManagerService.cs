@@ -35,7 +35,7 @@ namespace Project.Services
 
             if (!user.Categories.Any(x => x.CategoryName == addTransactionRequest.СategoryName))
             {
-                _logger.LogError("Лимит не обнаружен");
+                _logger.LogError($"Лимит для {addTransactionRequest.СategoryName} не обнаружен");
                 throw new Exception("Сначала установаите лимит для этой категории!");
             }
 
@@ -49,13 +49,13 @@ namespace Project.Services
 
             if (categorySum + addTransactionRequest.Amount > category.Limit)
             {
-                _logger.LogError("Попытка превышения лимита");
+                _logger.LogError($"Попытка превышения лимита для {addTransactionRequest.СategoryName}");
                 throw new Exception("Вы не можете превысить лимит по этой категории!");
             }
 
             category.Transactions.Add(new Transaction(addTransactionRequest.Description, addTransactionRequest.Amount));
 
-            _logger.LogInformation("Записи успещно записаны");
+            _logger.LogInformation($"Записи успещно записаны дял {addTransactionRequest.UserId}");
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Project.Services
                 transactions.AddRange(transactionList.Transactions);
             }
 
-            _logger.LogInformation("Записи отправляются");
+            _logger.LogInformation($"Записи отправляются для {userId}");
 
             return transactions;
         }
@@ -105,7 +105,7 @@ namespace Project.Services
                 analysis.Add(new Analysis(categoryName, limit, actualSpent));
             }
 
-            _logger.LogInformation("Записи отправляются");
+            _logger.LogInformation($"Записи отправляются для {userId}");
 
             return analysis;
         }

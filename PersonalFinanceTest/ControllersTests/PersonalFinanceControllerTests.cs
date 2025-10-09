@@ -4,11 +4,11 @@ using Moq;
 using Project.Controllers;
 using Project.Interfaces;
 using Project.Models;
-using Project.Models.TakedFromBody; 
+using Project.Models.TakedFromBody;
 using Transaction = Project.Models.Transaction;
 
-namespace PersonalFinanceTest
-{
+namespace PersonalFinanceTest.ControllersTests
+{ 
     public class PersonalFinanceControllerTests
     {
         [Fact]

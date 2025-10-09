@@ -11,13 +11,16 @@ namespace Project.Validators
         public AddTransactionRequestValidator() 
         {
             RuleFor(x => x.СategoryName)
-                .NotNull();
+                .NotNull()
+                .WithMessage("CategoryName не должен быть пустым");
 
             RuleFor(x => x.Description)
-                .NotNull();
+                .NotNull()
+                .WithMessage("Description не должен быть пустым");
 
             RuleFor(x => x.Amount)
-                .GreaterThan(0).WithMessage("Amount должен быть больше 0");
+                .GreaterThan(0)
+                .WithMessage("Amount должен быть больше 0");
         }
     }
 }
