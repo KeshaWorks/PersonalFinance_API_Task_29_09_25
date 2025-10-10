@@ -31,6 +31,7 @@ namespace Project.Services
         public InsightSaving[] GetInsightsSavings(int userId)
         {
             var user = _userManagerRepositorie.GetUserById(userId);
+            List<Category> categories = user.Categories;
             int userCatigoriesCount = user.Categories.Count;
             List<UsersManagerServiceHelper> usersManagerRepositorieHelpers = new List<UsersManagerServiceHelper>();
 
@@ -38,7 +39,7 @@ namespace Project.Services
             {
                 decimal totalSum = 0;
 
-                for (int j = 0; j < userCatigoriesCount; j++)
+                for (int j = 0; j < categories[i].Transactions.Count(); j++)
                 {
                     // Calculate common sum of every transactions for every category
                     totalSum += user.Categories[i].Transactions[j].Amount;

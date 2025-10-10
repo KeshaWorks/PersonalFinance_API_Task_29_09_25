@@ -32,6 +32,7 @@ namespace PersonalFinanceTest.ServicesTests
             var result = repositorieMock.Object.GetUserById(1).Categories.Find(x => x.CategoryName == "Test").Limit;
 
             Assert.Equal(1000, result);
+            Assert.Equal(1, repositorieMock.Object.GetUserById(1).Categories.Count());
         }
     }
 }

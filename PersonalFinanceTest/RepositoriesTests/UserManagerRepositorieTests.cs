@@ -21,18 +21,9 @@ namespace PersonalFinanceTest.RepositoriesTests
                 new User { UserId = 3, Categories = new List<Category>()},
             ];
 
-            string result = string.Empty;
+            var ex = Assert.Throws<Exception>(() => userManagerRepositorie.GetUserById(4)); 
 
-            try
-            {
-                userManagerRepositorie.GetUserById(4);
-            }
-            catch (Exception ex)
-            {
-                result = ex.Message;
-            }
-
-            Assert.Equal("Такого пользователя не существует", result);
+            Assert.Equal("Такого пользователя не существует", ex.Message);
         }
     }
 }
